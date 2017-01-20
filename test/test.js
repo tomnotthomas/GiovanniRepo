@@ -87,11 +87,11 @@ describe('Hash table', function () {
   let hashTable;
 
   beforeEach(function () {
-    hashTable = new HashTable(10);
+    hashTable = new HashTable(2);
   });
 
   it('each instance should have a "size" property', function () {
-    hashTable.size.should.equal(10);
+    hashTable.size.should.equal(2);
   });
 
   it('the class should provide an "insert()" method', function () {
@@ -111,17 +111,20 @@ describe('Hash table', function () {
 
   it('should insert key / value pairs, and be able to retrieve them', function () {
     should.equal(hashTable.retrieve('hello'), undefined);
-    hashTable.insert('hello', 'world').should.be.true;
-    hashTable.retrieve('hello').should.equal('world');
+    hashTable.insert('hello', '1').should.be.true;
+    hashTable.retrieve('hello').should.equal('1');
     should.equal(hashTable.retrieve('world'), undefined);
-    hashTable.insert('world', 'hello');
-    hashTable.retrieve('world').should.equal('hello');
+    hashTable.insert('world', '2');
+    hashTable.insert('today', '3');
+    hashTable.retrieve('hello').should.equal('1');
+    hashTable.retrieve('world').should.equal('2');
+    hashTable.retrieve('today').should.equal('3');
   });
 
   it('should delete keys, and make sure that they return "undefined"', function () {
     hashTable.remove('hello').should.be.false;
-    hashTable.insert('hello', 'world');
-    hashTable.insert('world', 'hello');
+    hashTable.insert('hello', '1');
+    hashTable.insert('world', '2');
     hashTable.remove('hello').should.be.true;
     should.equal(hashTable.retrieve('hello'), undefined);
     hashTable.remove('hello').should.be.false;
@@ -130,11 +133,11 @@ describe('Hash table', function () {
   });
 
   it('should be able to insert and delete the same key / value pair several times ', function () {
-    hashTable.insert('hello', 'world');
-    hashTable.retrieve('hello').should.equal('world');
+    hashTable.insert('hello', '1');
+    hashTable.retrieve('hello').should.equal('1');
     hashTable.remove('hello').should.be.true;
-    hashTable.insert('hello', 'world');
-    hashTable.retrieve('hello').should.equal('world');
+    hashTable.insert('hello', '1');
+    hashTable.retrieve('hello').should.equal('1');
     hashTable.remove('hello').should.be.true;
     should.equal(hashTable.retrieve('hello'), undefined);
   });
