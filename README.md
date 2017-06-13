@@ -27,7 +27,7 @@ The class should provide these methods:
 
 Read about hash tables [here](https://en.wikipedia.org/wiki/Hash_table), then implement one so that each instance has a `size` property, which corresponds to the size of the underlying storage.
 
-Use the provided hash function to convert any key into an index. Try interacting with it a bit first to get a sense of what it does. Keep in mind that your final implementation must handle conflicts.
+Use the provided hash function to convert any key into an index. Try interacting with it a bit first to get a sense of what it does. Keep in mind that your final implementation must handle conflicts (using linked lists).
 
 The class should provide these shared methods:
 
