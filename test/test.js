@@ -111,8 +111,9 @@ describe('Hash table', function () {
 
   it('should insert key / value pairs, and be able to retrieve them', function () {
     should.equal(hashTable.retrieve('hello'), undefined);
+    hashTable.insert('hello', '2').should.be.true;
+    hashTable.retrieve('hello').should.equal('2');
     hashTable.insert('hello', '1').should.be.true;
-    hashTable.retrieve('hello').should.equal('1');
     should.equal(hashTable.retrieve('world'), undefined);
     hashTable.insert('world', '2');
     hashTable.insert('today', '3');
