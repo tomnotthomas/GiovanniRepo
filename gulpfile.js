@@ -4,7 +4,7 @@ const fs = require('fs');
 const del = require('del');
 const $ = require('gulp-load-plugins')();
 
-// Utility to ignore Node modules and Bower components
+// Utility to ignore unnecessary files
 // when generating the glob patterns array for gulp.src()
 function addDefSrcIgnore (srcArr) {
   return srcArr.concat([
