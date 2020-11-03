@@ -72,12 +72,18 @@ describe('Tree', function () {
     tree = new Tree('hello');
     tree.contains('hello').should.be.true;
     tree.contains('world').should.be.false;
-    const subTree = new Tree('world');
-    tree.addChild(subTree).should.be.true;
+    const subTree1 = new Tree('world');
+    const subTree2 = new Tree('codeworks');
+    tree.addChild(subTree1).should.be.true;
+    tree.addChild(subTree2).should.be.true;
     tree.contains('world').should.be.true;
-    const subSubTree = new Tree('today');
-    subTree.addChild(subSubTree).should.be.true;
+    tree.contains('codeworks').should.be.true;
+    const subSubTree1 = new Tree('today');
+    const subSubTree2 = new Tree('tomorrow');
+    subTree1.addChild(subSubTree1).should.be.true;
+    subTree2.addChild(subSubTree2).should.be.true;
     tree.contains('today').should.be.true;
+    tree.contains('tomorrow').should.be.true;
   });
 
 });
