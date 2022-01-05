@@ -82,6 +82,7 @@ describe('Tree', function () {
     const subSubTree2 = new Tree('tomorrow');
     subTree1.addChild(subSubTree1).should.be.true;
     subTree2.addChild(subSubTree2).should.be.true;
+    tree.contains('amazing').should.be.false;
     tree.contains('today').should.be.true;
     tree.contains('tomorrow').should.be.true;
   });

@@ -16,7 +16,7 @@ exports.Storage = function (size) {
 
   const storage = [];
 
-  return {
+  return Object.freeze({
     get: function (index) {
       checkLimit(index, size);
       return getValue(storage, index);
@@ -25,7 +25,7 @@ exports.Storage = function (size) {
       checkLimit(index, size);
       setValue(storage, index, value);
     }
-  };
+  });
 
 };
 
