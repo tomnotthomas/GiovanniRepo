@@ -1,6 +1,5 @@
 'use strict';
 
-
 const helpers = require('./hash-table-helpers');
 
 // These are your helpers, they're used to generate
