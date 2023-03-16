@@ -1,6 +1,6 @@
 'use strict';
 
-var should = require('chai').should();
+const should = require('chai').should();
 
 const Set = require('../scripts/set.js');
 const Tree = require('../scripts/tree.js');
