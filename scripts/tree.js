@@ -15,7 +15,6 @@ Tree.prototype.addChild = function (node) {
   
 //   // If value is found in this node return true
 //   if (this.value === value) return true;
-//   console.log(this.children);
 
 //   // Else loop over this node's children
 //   for (let child of this.children) {
@@ -28,27 +27,32 @@ Tree.prototype.addChild = function (node) {
 // };
 
 // Non-Recursive Version
+// Easier implementation would have been using a while loop to add all children to a queue and check them
 Tree.prototype.contains = function (value) {
-  
+  // Check first node for value
   if (this.value === value) return true;
 
-  // Declares Initial Node, variable to keep track of index in children arrays
+  // Declare Initial Node and array to track progress and allow backtracking and turning
   let node = this;
-  let lastIndex = 0;
-  let endNotReached = true;
   let nodeTrack = [];
-  if (node.value === value) return true;
+
+  // Place initial node in array
   nodeTrack.push([node, 0]);
 
-  while (endNotReached) {
+  // Don't stop looping
+  while (true) {
 
+    // Loop to go down branches while checking for value
     while (hasChildren()) {
-      // stepDown(); If the node has children go down and add new node to track
+      // If the node has children go down and add new element to nodeTrack
       node = node.children[nextChild()];
       nodeTrack.push([node, 0]);
       if (node.value === value) return true;
     }
     
+    // Once we reach the bottom
+    // Loop to go up branches while checking for other children to explore
+    // As soon as a new child is found break out of this loop and dive into its branch
     let noNextChild = true;
     while (noNextChild && node !== this) {
       nodeTrack.pop();
@@ -60,7 +64,8 @@ Tree.prototype.contains = function (value) {
       }
     }
 
-    if (noNextChild === true && node === this) {return false}
+    // If there are no more children to explore and we are back to initial node return false
+    if (noNextChild === true && node === this) {return false;}
     
   }
 
@@ -71,8 +76,22 @@ Tree.prototype.contains = function (value) {
   function hasChildren () {
     return node.children.length > 0 || false;
   }    
-  
-  //return false;
 };
+
+/* Nice Proper Way
+
+Tree.prototype.contains = function (value) {
+  if(this.value === value) return true;
+  const stack = [...this.children];
+  while (stack.length > 0) {
+    let current = stack.pop();
+    if (current.value === value) return true;
+    stack.push(...current.children);
+  }
+  return false;
+}
+
+*/
+
 
 module.exports = Tree;

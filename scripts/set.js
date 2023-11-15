@@ -15,9 +15,10 @@ Set.prototype.contains = function (value) {
 };
 
 Set.prototype.remove = function (value) {
-
+  if (this.contains(value)) {
   delete this.storage[Object.entries(this.storage).findIndex(element=> element[1]===value)];
   return true;
+  }
 };
 
 module.exports = Set;
