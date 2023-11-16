@@ -11,6 +11,7 @@ const hash = helpers.hash;
 function HashTable (size) {
   this.storage = new Storage(size);
   this.size = size;
+  this.itemsStored = 0;
 }
 
 HashTable.prototype.insert = function (key, value) {
@@ -32,11 +33,14 @@ HashTable.prototype.insert = function (key, value) {
     }
 
     node.next = {key, value};
+    this.itemsStored++;
+    this.checkLoad();
     return true;
   } 
   
   else {
     this.storage.set(hash(key, this.size), {key, value});
+    this.itemsStored++;
   }
 
   return true;
@@ -62,8 +66,10 @@ HashTable.prototype.remove = function (key) {
       if (node.next) {
         this.storage.set(hash(key, this.size), node.next);
       } else {
-        this.storage.set(hash(key, this.size), {});
+        this.storage.set(hash(key, this.size), undefined);
       }
+      this.itemsStored--;
+      this.checkLoad();
       return true;
     } else {
       while (node.next) {
@@ -73,6 +79,8 @@ HashTable.prototype.remove = function (key) {
           } else {
             delete node.next;
           }
+          this.itemsStored--;
+          this.checkLoad();
           return true;
         }
         node = node.next;
@@ -82,11 +90,34 @@ HashTable.prototype.remove = function (key) {
   return false;
 };
 
+HashTable.prototype.checkLoad = function () {
+  const load = this.itemsStored / this.size;
+  load >= 0.75 ? this.resize(2)/* console.log('double me!') */ : load < 0.25 && this.size > 2 ? this.resize (0.5)/* console.log('half me!') */ : null; 
+};
 
-console.log(hash('hello', 2));
-console.log(hash('world', 2));
+HashTable.prototype.resize = function (factor) {
 
-const obj = {};
-console.log(obj.value);
+  // console.log('size:', this.size, 'itemsStored:', this.itemsStored);
+  // Retrieve stack of nodes from current storage
+  const stack = [];
+  for (let i = 0; i < this.size; i++) {
+    while (this.storage.get(i) !== undefined) {
+      stack.push(this.storage.get(i));
+      this.remove(stack[stack.length-1].key);
+    }
+  }
+
+  this.size = this.size * factor;
+  this.storage = new Storage(this.size);
+  this.itemsStored = 0;
+
+  // Insert nodes from stack into new storage
+  while (stack.length>0) {
+    let node = stack.pop();
+    // delete node.next; Not necessary since set does not add pointers to existing nodes but creates new nodes
+    this.insert(node.key, node.value);
+  }
+  // console.log('size:', this.size, 'itemsStored:', this.itemsStored);
+};
 
 module.exports = HashTable;
