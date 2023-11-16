@@ -56,6 +56,19 @@ describe('Set', function () {
     Set.containedBy('hello').should.eql([['first', set],['second', set2]]);
   });
 
+  it('the class should provide a way to show what sets a value is contained by', function () {
+    set.add('hello');
+    set.add('world');
+    let set2 = new Set('second');
+    set2.add('why');
+    set2.add('hello');
+    let set3 = new Set('third');
+    set3.add('why');
+    set3.add('world');
+    set3.add('hello');
+    Set.getIntersection(set,set2,set3).should.eql(['hello']);
+  });
+
 
 
 });

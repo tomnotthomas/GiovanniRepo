@@ -16,13 +16,23 @@ Set.containedBy = function (value) {
       // console.log(element[1].storage);
     }
   }
-  console.log(arr);
+  // console.log(arr);
   return arr;
 };
 
-// Set.getIntersection(...sets) {
-
-// };
+Set.getIntersection = function () {
+  let sets = [...arguments];
+  if (sets.length > 2) {
+    const intersection = [];
+    for (let element in sets[0].storage) {
+      if (sets.slice(1).every(set => set.contains(sets[0].storage[element]))) {
+        intersection.push(sets[0].storage[element]);
+      }
+    }
+    return intersection;
+  }
+  return false;
+};
 
 Set.prototype.add = function (value) {
   if (!this.contains(value)) {
@@ -43,10 +53,10 @@ Set.prototype.remove = function (value) {
   }
 };
 
-console.log(Set);
+// console.log(Set);
 
-const setex = new Set();
-console.log(setex);
+// const setex = new Set();
+// console.log(setex);
 
 module.exports = Set;
 
