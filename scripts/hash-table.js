@@ -12,6 +12,7 @@ function HashTable (size) {
   this.storage = new Storage(size);
   this.size = size;
   this.itemsStored = 0;
+  this.checkActive = true;
 }
 
 HashTable.prototype.insert = function (key, value) {
@@ -41,6 +42,7 @@ HashTable.prototype.insert = function (key, value) {
   else {
     this.storage.set(hash(key, this.size), {key, value});
     this.itemsStored++;
+    this.checkLoad(); // !: Wasn't here before but should be needed; 
   }
 
   return true;
@@ -92,16 +94,18 @@ HashTable.prototype.remove = function (key) {
 
 HashTable.prototype.checkLoad = function () {
   const load = this.itemsStored / this.size;
-  if (this.itemsStored >=0) {
+  if (this.checkActive === true) {
     load >= 0.75 ? this.resize(2)/* console.log('double me!') */ : load < 0.25 && this.size > 2 ? this.resize (0.5)/* console.log('half me!') */ : null; 
   }
 };
 
 HashTable.prototype.resize = function (factor) {
-  console.log('size:', this.size, 'itemsStored:', this.itemsStored);
-
+  // console.log('size:', this.size, 'itemsStored:', this.itemsStored);
+  // for (let i = 0; i < this.size; i++) {
+  //   console.log(this.storage.get(i));
+  // }
   // Escape resizing trigger
-  this.itemsStored = -1;  
+  this.checkActive = false;  
 
   // Retrieve stack of nodes from current storage
   const stack = [];
@@ -114,7 +118,7 @@ HashTable.prototype.resize = function (factor) {
 
   this.size = this.size * factor;
   this.storage = new Storage(this.size);
-  this.itemsStored = 0;
+  // this.itemsStored = 0;
 
   // Insert nodes from stack into new storage
   while (stack.length>0) {
@@ -122,7 +126,16 @@ HashTable.prototype.resize = function (factor) {
     // delete node.next; Not necessary since set does not add pointers to existing nodes but creates new nodes
     this.insert(node.key, node.value);
   }
-  console.log('size:', this.size, 'itemsStored:', this.itemsStored);
+
+  this.checkActive = true;
+  // console.log('size:', this.size, 'itemsStored:', this.itemsStored);
+  // for (let i = 0; i < this.size; i++) {
+  //   console.log(this.storage.get(i));
+  // }
 };
 
+
+// console.log (hash('hello',8));
+// console.log (hash('world',8));
+// console.log (hash('why',8));
 module.exports = HashTable;

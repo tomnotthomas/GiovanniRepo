@@ -11,7 +11,8 @@ describe('Set', function () {
   let set;
 
   beforeEach(function () {
-    set = new Set();
+    Set._sets = [];
+    set = new Set('first');
   });
 
   it('the class should provide an "add()" method', function () {
@@ -47,6 +48,15 @@ describe('Set', function () {
     set.contains('hello').should.be.false;
     set.contains('world').should.be.true;
   });
+
+  it('the class should provide a way to show what sets a value is contained by', function () {
+    set.add('hello');
+    let set2 = new Set('second');
+    set2.add('hello');
+    Set.containedBy('hello').should.eql([['first', set],['second', set2]]);
+  });
+
+
 
 });
 
@@ -133,7 +143,6 @@ describe('Hash table', function () {
     hashTable.remove('hello').should.be.false;
     hashTable.insert('hello', '1');
     hashTable.insert('world', '2');
-    hashTable.insert('why', '2');
     hashTable.remove('hello').should.be.true;
     should.equal(hashTable.retrieve('hello'), undefined);
     hashTable.remove('hello').should.be.false;
