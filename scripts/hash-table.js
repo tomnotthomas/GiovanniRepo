@@ -15,6 +15,7 @@ function HashTable (size) {
   this.checkActive = true;
 }
 
+// IN REVIEW HE ADDED NEW DATA AT BEGINNING OF LINKLIST!
 HashTable.prototype.insert = function (key, value) {
   let node = this.storage.get(hash(key, this.size));
 

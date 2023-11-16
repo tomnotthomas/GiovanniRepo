@@ -31,7 +31,6 @@ Set.getIntersection = function () {
     }
     return intersection;
   }
-  return false;
 };
 
 Set.prototype.add = function (value) {

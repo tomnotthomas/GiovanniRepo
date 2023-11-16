@@ -67,6 +67,8 @@ describe('Set', function () {
     set3.add('world');
     set3.add('hello');
     Set.getIntersection(set,set2,set3).should.eql(['hello']);
+    set3.remove('hello');
+    Set.getIntersection(set,set2,set3).should.eql([]);
   });
 
 
