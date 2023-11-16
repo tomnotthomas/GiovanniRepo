@@ -92,12 +92,17 @@ HashTable.prototype.remove = function (key) {
 
 HashTable.prototype.checkLoad = function () {
   const load = this.itemsStored / this.size;
-  load >= 0.75 ? this.resize(2)/* console.log('double me!') */ : load < 0.25 && this.size > 2 ? this.resize (0.5)/* console.log('half me!') */ : null; 
+  if (this.itemsStored >=0) {
+    load >= 0.75 ? this.resize(2)/* console.log('double me!') */ : load < 0.25 && this.size > 2 ? this.resize (0.5)/* console.log('half me!') */ : null; 
+  }
 };
 
 HashTable.prototype.resize = function (factor) {
+  console.log('size:', this.size, 'itemsStored:', this.itemsStored);
 
-  // console.log('size:', this.size, 'itemsStored:', this.itemsStored);
+  // Escape resizing trigger
+  this.itemsStored = -1;  
+
   // Retrieve stack of nodes from current storage
   const stack = [];
   for (let i = 0; i < this.size; i++) {
@@ -117,7 +122,7 @@ HashTable.prototype.resize = function (factor) {
     // delete node.next; Not necessary since set does not add pointers to existing nodes but creates new nodes
     this.insert(node.key, node.value);
   }
-  // console.log('size:', this.size, 'itemsStored:', this.itemsStored);
+  console.log('size:', this.size, 'itemsStored:', this.itemsStored);
 };
 
 module.exports = HashTable;

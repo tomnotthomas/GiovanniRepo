@@ -133,6 +133,7 @@ describe('Hash table', function () {
     hashTable.remove('hello').should.be.false;
     hashTable.insert('hello', '1');
     hashTable.insert('world', '2');
+    hashTable.insert('why', '2');
     hashTable.remove('hello').should.be.true;
     should.equal(hashTable.retrieve('hello'), undefined);
     hashTable.remove('hello').should.be.false;
