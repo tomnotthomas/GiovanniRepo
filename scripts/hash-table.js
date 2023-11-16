@@ -33,9 +33,12 @@ HashTable.prototype.insert = function (key, value) {
 
     node.next = {key, value};
     return true;
-  } else {
+  } 
+  
+  else {
     this.storage.set(hash(key, this.size), {key, value});
   }
+
   return true;
 };
 
@@ -53,16 +56,30 @@ HashTable.prototype.retrieve = function (key) {
 };
 
 HashTable.prototype.remove = function (key) {
-  // let node = this.storage.get(hash(key, this.size));
-
-  // while (node) {
-  //   if (key === node.key) {
-  //     return node.value;
-  //   } else {
-  //     node = node.next;
-  //   }
-  // }
-  // return undefined;
+  let node = this.storage.get(hash(key, this.size));
+  if (node) {
+    if (key === node.key) {
+      if (node.next) {
+        this.storage.set(hash(key, this.size), node.next);
+      } else {
+        this.storage.set(hash(key, this.size), {});
+      }
+      return true;
+    } else {
+      while (node.next) {
+        if (key === node.next.key) {
+          if (node.next.next) {
+            node.next = node.next.next;
+          } else {
+            delete node.next;
+          }
+          return true;
+        }
+        node = node.next;
+      }
+    }
+  }
+  return false;
 };
 
 
