@@ -51,9 +51,14 @@ describe('Set', function () {
 
   it('the class should provide a way to show what sets a value is contained by', function () {
     set.add('hello');
+    set.add('why');
     let set2 = new Set('second');
     set2.add('hello');
+    set2.add('world');
     Set.containedBy('hello').should.eql([['first', set],['second', set2]]);
+    Set.containedBy('why').should.eql([['first', set]]);
+    Set.containedBy('world').should.eql([['second', set2]]);
+    Set.containedBy('none').should.eql([]);
   });
 
   it('the class should provide a way to show what sets a value is contained by', function () {
@@ -69,6 +74,8 @@ describe('Set', function () {
     Set.getIntersection(set,set2,set3).should.eql(['hello']);
     set3.remove('hello');
     Set.getIntersection(set,set2,set3).should.eql([]);
+    Set.getIntersection(set,set2).should.eql(['hello']);
+    should.equal(Set.getIntersection(set), undefined);
   });
 
 
@@ -175,4 +182,27 @@ describe('Hash table', function () {
     should.equal(hashTable.retrieve('hello'), undefined);
   });
 
+  it('should be able auto-resize depending on slot occupation storage load ', function () {
+    hashTable.size.should.equal(2);
+    hashTable.insert('green', '1, 1');
+    hashTable.insert('hello', '0, 0');
+    hashTable.size.should.equal(4);
+    hashTable.remove('hello');
+    hashTable.remove('green');
+    hashTable.size.should.equal(2);
+    hashTable.insert('hello', '0, 0, 4');
+    hashTable.insert('hide', '0, 2, 2');
+    hashTable.size.should.equal(2);
+    hashTable.insert('green', '1, 1, 1');
+    hashTable.size.should.equal(4);
+    hashTable.insert('great', '0, 3, 3');
+    hashTable.size.should.equal(8);
+    hashTable.remove('hello');
+    hashTable.remove('green');
+    hashTable.remove('hide');
+    hashTable.size.should.equal(4);
+    // for (let i = 0; i < hashTable.size; i++) {
+    //   console.log(hashTable.storage.get(i));
+    // }
+  });
 });

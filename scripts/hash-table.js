@@ -12,7 +12,9 @@ function HashTable (size) {
   this.storage = new Storage(size);
   this.size = size;
   this.itemsStored = 0;
-  this.checkActive = true;
+  this.slotsOccupied = 0;
+  this.checkItemsActive = false; //!: Currently inactive. Set to true to switch.
+  this.checkSlotsActive = true; //!: Currently active. Set to false to switch.
 }
 
 // IN REVIEW HE ADDED NEW DATA AT BEGINNING OF LINKLIST!
@@ -36,14 +38,16 @@ HashTable.prototype.insert = function (key, value) {
 
     node.next = {key, value};
     this.itemsStored++;
-    this.checkLoad();
+    this.checkItemLoad();
     return true;
   } 
   
   else {
     this.storage.set(hash(key, this.size), {key, value});
     this.itemsStored++;
-    this.checkLoad(); // !: Wasn't here before but should be needed; 
+    this.slotsOccupied++;
+    this.checkItemLoad(); 
+    this.checkSlotLoad();
   }
 
   return true;
@@ -70,9 +74,11 @@ HashTable.prototype.remove = function (key) {
         this.storage.set(hash(key, this.size), node.next);
       } else {
         this.storage.set(hash(key, this.size), undefined);
+        this.slotsOccupied--;
+        this.checkSlotLoad();
       }
       this.itemsStored--;
-      this.checkLoad();
+      this.checkItemLoad();
       return true;
     } else {
       while (node.next) {
@@ -83,7 +89,7 @@ HashTable.prototype.remove = function (key) {
             delete node.next;
           }
           this.itemsStored--;
-          this.checkLoad();
+          this.checkItemLoad();
           return true;
         }
         node = node.next;
@@ -93,9 +99,16 @@ HashTable.prototype.remove = function (key) {
   return false;
 };
 
-HashTable.prototype.checkLoad = function () {
+HashTable.prototype.checkItemLoad = function () {
   const load = this.itemsStored / this.size;
-  if (this.checkActive === true) {
+  if (this.checkItemsActive === true) {
+    load >= 0.75 ? this.resize(2)/* console.log('double me!') */ : load < 0.25 && this.size > 2 ? this.resize (0.5)/* console.log('half me!') */ : null; 
+  }
+};
+
+HashTable.prototype.checkSlotLoad = function () {
+  const load = this.slotsOccupied / this.size;
+  if (this.checkSlotsActive === true) {
     load >= 0.75 ? this.resize(2)/* console.log('double me!') */ : load < 0.25 && this.size > 2 ? this.resize (0.5)/* console.log('half me!') */ : null; 
   }
 };
@@ -106,7 +119,8 @@ HashTable.prototype.resize = function (factor) {
   //   console.log(this.storage.get(i));
   // }
   // Escape resizing trigger
-  this.checkActive = false;  
+  this.checkItemsActive = false;
+  this.checkSlotsActive = false;  
 
   // Retrieve stack of nodes from current storage
   const stack = [];
@@ -128,15 +142,46 @@ HashTable.prototype.resize = function (factor) {
     this.insert(node.key, node.value);
   }
 
-  this.checkActive = true;
+  this.checkItemsActive = false; //!: Currently inactive. Set to true to switch.
+  this.checkSlotsActive = true; //!: Currently active. Set to false to switch.
   // console.log('size:', this.size, 'itemsStored:', this.itemsStored);
   // for (let i = 0; i < this.size; i++) {
   //   console.log(this.storage.get(i));
   // }
 };
 
+// console.log ('size 2 hashes:');
+// console.log ('hello:', hash('hello',2));
+// console.log ('world:', hash('world',2));
+// console.log ('red:', hash('red',2));
+// console.log ('yellow:', hash('yellow',2));
+// console.log ('orange:', hash('orange',2));
+// console.log ('green:', hash('green',2));
+// console.log ('why:', hash('why',2));
+// console.log ('great:', hash('great',2));
+// console.log ('dry:', hash('dry',2));
+// console.log ('hide:', hash('hide',2));
 
-// console.log (hash('hello',8));
-// console.log (hash('world',8));
-// console.log (hash('why',8));
+// console.log ('size 4 hashes:');
+// console.log ('hello:', hash('hello',4));
+// console.log ('world:', hash('world',4));
+// console.log ('red:', hash('red',4));
+// console.log ('yellow:', hash('yellow',4));
+// console.log ('orange:', hash('orange',4));
+// console.log ('green:', hash('green',4));
+// console.log ('why:', hash('why',4));
+// console.log ('great:', hash('great',4));
+// console.log ('dry:', hash('dry',4));
+// console.log ('hide:', hash('hide',4));
+
+// console.log ('size 8 hashes:');
+// console.log ('hello:', hash('hello',8));
+// console.log ('world:', hash('world',8));
+// console.log ('red:', hash('red',8));
+// console.log ('yellow:', hash('yellow',8));
+// console.log ('orange:', hash('orange',8));
+// console.log ('green:', hash('green',8));
+// console.log ('great:', hash('great',8));
+// console.log ('dry:', hash('dry',8));
+// console.log ('why:', hash('why',8));
 module.exports = HashTable;

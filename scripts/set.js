@@ -22,7 +22,7 @@ Set.containedBy = function (value) {
 
 Set.getIntersection = function () {
   let sets = [...arguments];
-  if (sets.length > 2) {
+  if (sets.length >= 2) {
     const intersection = [];
     for (let element in sets[0].storage) {
       if (sets.slice(1).every(set => set.contains(sets[0].storage[element]))) {
